@@ -32,11 +32,12 @@ namespace Mqtt_Api.Service
             }
             finally
             {
-                if (mqttClient.IsConnected)
+                if (mqttClient != null && mqttClient.IsConnected)
                 {
                     await mqttClient.DisconnectAsync();
                 }
             }
         }
+
     }
 }
