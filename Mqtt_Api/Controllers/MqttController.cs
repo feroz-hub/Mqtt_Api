@@ -12,11 +12,19 @@ public class MqttController : ControllerBase
     public MqttController(IMqttService mqttService) => _mqttService = mqttService;
 
     [HttpGet("status")]
-    public IActionResult GetMqttBrokerStatus()
+    public async Task<IActionResult> GetMqttBrokerStatus(
+     [FromQuery] string brokerAddress,
+     [FromQuery] int brokerPort)
     {
-        var isConnected = _mqttService.IsConnected();
-        return Ok(new { Status = isConnected ? "Connected" : "Disconnected" });
+       
+        var isBrokerConnected = await _mqttService.CheckBrokerStatus(brokerAddress, brokerPort);
+
+        return Ok(new
+        {
+            BrokerStatus = isBrokerConnected ? "Broker Connected" : "Broker Disconnected"
+        });
     }
+
 
     [HttpPost("connect")]
     public async Task<IActionResult> ConnectToMqttBroker(
