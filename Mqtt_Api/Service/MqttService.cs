@@ -2,7 +2,7 @@
 using MQTTnet;
 using MQTTnet.Client;
 
-public class MqttService:IMqttService
+public class MqttService : IMqttService
 {
     private readonly IMqttClient _mqttClient;
 

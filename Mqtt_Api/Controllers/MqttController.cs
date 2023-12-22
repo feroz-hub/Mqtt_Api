@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Mqtt_Api.Interface;
 using Mqtt_Api.Models;
 using System.Threading.Tasks;
 
@@ -6,12 +7,9 @@ using System.Threading.Tasks;
 [ApiController]
 public class MqttController : ControllerBase
 {
-    private readonly MqttService _mqttService;
+    private readonly IMqttService _mqttService;
 
-    public MqttController(MqttService mqttService)
-    {
-        _mqttService = mqttService;
-    }
+    public MqttController(IMqttService mqttService) => _mqttService = mqttService;
 
     [HttpGet("status")]
     public IActionResult GetMqttBrokerStatus()
