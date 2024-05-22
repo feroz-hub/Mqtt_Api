@@ -1,23 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Mqtt_Api.Interface;
 using Mqtt_Api.Models;
-using System.Threading.Tasks;
+
+namespace Mqtt_Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class MqttController : ControllerBase
+public class MqttController (IMqttService mqttService): ControllerBase
 {
-    private readonly IMqttService _mqttService;
-
-    public MqttController(IMqttService mqttService) => _mqttService = mqttService;
-
+    
     [HttpGet("status")]
     public async Task<IActionResult> GetMqttBrokerStatus(
-     [FromQuery] string brokerAddress,
-     [FromQuery] int brokerPort)
+        [FromQuery] string brokerAddress,
+        [FromQuery] int brokerPort)
     {
        
-        var isBrokerConnected = await _mqttService.CheckBrokerStatus(brokerAddress, brokerPort);
+        var isBrokerConnected = await mqttService.CheckBrokerStatus(brokerAddress, brokerPort);
 
         return Ok(new
         {
@@ -35,7 +33,7 @@ public class MqttController : ControllerBase
             return BadRequest(new { Error = "Invalid request parameters" });
         }
 
-        var isConnected = await _mqttService.ConnectAsync(request.BrokerAddress, request.BrokerPort);
+        var isConnected = await mqttService.ConnectAsync(request.BrokerAddress, request.BrokerPort);
 
         if (isConnected)
         {
@@ -47,4 +45,3 @@ public class MqttController : ControllerBase
         }
     }
 }
-
